@@ -1,3 +1,4 @@
+import { HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TiendanubeApiService } from './tiendanube-api.service';
 
@@ -6,7 +7,11 @@ describe('TiendanubeApiService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [TiendanubeApiService],
+      providers: [TiendanubeApiService,
+        {
+          provide: HttpService,
+          useValue: jest.fn()
+        }],
     }).compile();
 
     service = module.get<TiendanubeApiService>(TiendanubeApiService);
