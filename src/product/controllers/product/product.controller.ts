@@ -1,4 +1,4 @@
-import { Controller, Get, HttpException, HttpStatus, Param, Query, Headers } from '@nestjs/common';
+import { Controller, Get, HttpException, HttpStatus, Param, Query, Headers, NotFoundException } from '@nestjs/common';
 import { User } from 'src/authentication/entities/user.entity';
 import { AuthenticationService } from 'src/authentication/services/authentication/authentication.service';
 import { Product } from 'src/product/dtos/Product';
@@ -17,7 +17,7 @@ export class ProductController {
         private converterService: ConverterService
     ){}
  
-    @Get('/currency/all')
+    @Get('/currencies')
     async getAvailableCurrencies(){
         return await this.aewsomeApiService.getAvailableCurrencies();
     }
@@ -40,7 +40,7 @@ export class ProductController {
         let product: Product = await this.tiendanubeApiService.getProductById(userId, user[0].access_token, productId)
         
         if(!product){
-            throw new HttpException('Product not found!', HttpStatus.NOT_FOUND)
+            throw NotFoundException
         }
 
         if(currency){
