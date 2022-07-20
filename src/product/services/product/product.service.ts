@@ -27,10 +27,12 @@ export class ProductService {
 
     async getProductInSelectedCurrencyById(userId: number, productId: number, currency: string): Promise<Product>{
         let user = await this.authenticationService.findUserByUserId(userId)
-        let product: Product = await this.tiendanubeApiService.getProductById(userId, user[0].access_token, productId)
-
-        if(!product){
-            throw NotFoundException
+        let product: Product
+        
+        try{
+            product = await this.tiendanubeApiService.getProductById(userId, user[0].access_token, productId)
+        }catch(error){
+            throw new NotFoundException('Product not found!')
         }
 
         if(currency){
